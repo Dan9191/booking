@@ -3,6 +3,7 @@ package ru.dan.booking.service
 import jakarta.ws.rs.NotFoundException
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.reactive.function.client.WebClient
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
@@ -21,6 +22,7 @@ class BookingService(
     private val jwtTokenProvider: JwtTokenProvider
 ) {
 
+    @Transactional
     fun createBooking(
         request: CreateBookingRequest,
         authHeader: String,
@@ -49,7 +51,7 @@ class BookingService(
             }
     }
 
-
+    @Transactional
     fun getBooking(id: Long, authHeader: String): Mono<BookingDto> {
         return getUserIdFromToken(authHeader)
             .flatMap { userId ->
@@ -139,6 +141,7 @@ class BookingService(
     }
 
     // DELETE /booking/{id}
+    @Transactional
     fun cancelBooking(id: Long, authHeader: String): Mono<Void> {
         return getUserIdFromToken(authHeader)
             .flatMap { userId ->
@@ -158,6 +161,7 @@ class BookingService(
     }
 
     // GET /bookings
+    @Transactional
     fun getUserBookings(authHeader: String): Flux<BookingDto> {
         return getUserIdFromToken(authHeader)
             .flatMapMany { userId ->
