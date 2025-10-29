@@ -19,6 +19,7 @@ object TestContainersFactory {
     init {
         WIREMOCK_CONTAINER.start();
 
+
         Runtime.getRuntime().addShutdownHook(Thread {
             WIREMOCK_CONTAINER.stop();
         })

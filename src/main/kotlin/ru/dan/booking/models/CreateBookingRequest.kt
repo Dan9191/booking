@@ -5,7 +5,8 @@ import java.time.LocalDate
 
 data class CreateBookingRequest(
     val autoSelect: Boolean,
-    val roomId: Long? = null,
+    val roomId: Long,
+    val userId: Long,
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     val startDate: LocalDate,
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)

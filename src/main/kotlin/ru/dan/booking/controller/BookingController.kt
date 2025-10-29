@@ -48,7 +48,7 @@ class BookingController(
      * Создать бронь.
      */
     @PostMapping
-    @PreAuthorize("hasAnyRole('ROLE_BOOKING_SERVICE', 'ROLE_ADMIN', 'ROLE_USER')")
+    @PreAuthorize("hasAnyRole('ROLE_BOOKING_SERVICE', 'ROLE_ADMIN')")
     fun createBooking(@RequestBody request: CreateBookingRequest,
                       @RequestHeader("Authorization") token: String,
                       @RequestHeader("X-Correlation-Id") correlationId: String): Mono<BookingDto> {

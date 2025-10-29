@@ -29,19 +29,14 @@ class BookingService(
         correlationId: String
     ): Mono<BookingDto> {
 
-        val username = jwtTokenProvider.getUsernameFromToken(authHeader.replace("Bearer ", ""))
-
-        return getUserId(username.toString(), authHeader, correlationId)
-            .flatMap { userId ->
-                if (request.autoSelect) {
-                    selectRoomAutomatically(request.startDate, request.endDate, authHeader, correlationId)
-                } else {
-                    confirmRoom(request.roomId!!, request.startDate, request.endDate, authHeader, correlationId)
-                }.map { roomId -> userId to roomId }
-            }
-            .flatMap { (userId, roomId) ->
+        return if (request.autoSelect) {
+            selectRoomAutomatically(request.startDate, request.endDate, authHeader, correlationId)
+        } else {
+            confirmRoom(request.roomId, request.startDate, request.endDate, authHeader, correlationId)
+        }
+            .flatMap { roomId ->
                 val booking = Booking(
-                    userId = userId,
+                    userId = request.userId,
                     roomId = roomId,
                     startDate = request.startDate,
                     endDate = request.endDate
@@ -92,16 +87,6 @@ class BookingService(
             .bodyValue(availabilityRequest)
             .retrieve()
             .bodyToMono(Long::class.java)
-    }
-
-    private fun getUserId(username: String, auth: String, cid: String): Mono<Long> {
-        return webClient.get()
-            .uri("/api/user/$username")
-            .header("Authorization", auth)
-            .header("X-Correlation-Id", cid)
-            .retrieve()
-            .bodyToMono(UserDto::class.java)
-            .map { it.id!! }
     }
 
     private fun getUserIdFromToken(authHeader: String): Mono<Long> {
