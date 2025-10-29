@@ -7,16 +7,12 @@ import io.jsonwebtoken.Claims
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.security.Keys
 import reactor.core.publisher.Mono
+import java.nio.charset.StandardCharsets
 import java.security.Key
-import java.util.*
 
 @Component
 class JwtTokenProvider(
-    @Value("\${app.jwt.secret}") private val jwtSecret: String,
-    @Value("\${app.jwt.expiration:3600000}") private val jwtExpiration: Long
-) {
-
-    private val key: Key by lazy { Keys.hmacShaKeyFor(jwtSecret.toByteArray()) }
+    @Value("\${app.jwt.secret}") private val jwtSecret: String, ) {
 
     /**
      * Извлекает username из токена
@@ -27,36 +23,16 @@ class JwtTokenProvider(
         }.onErrorResume { Mono.empty() }
     }
 
-    /**
-     * Получить все claims
-     */
     fun getClaims(token: String): Claims {
-        return Jwts.parser()
-            .setSigningKey(key)
+        val keyBytes = jwtSecret.toByteArray(StandardCharsets.UTF_8)
+        val key = Keys.hmacShaKeyFor(keyBytes)
+
+        val jwt = Jwts.parser() // заменено на parserBuilder()
+            .verifyWith(key)
             .build()
-            .parseClaimsJws(token)
-            .body
-    }
+            .parseSignedClaims(token)
 
-    /**
-     * Валидация токена (подпись + срок)
-     */
-    fun validateToken(token: String): Mono<Boolean> {
-        return Mono.fromCallable {
-            val claims = getClaims(token)
-            val expiration = claims.expiration
-            expiration != null && expiration.after(Date())
-        }.onErrorResume { Mono.just(false) }
-    }
-
-    /**
-     * Извлечь роли (например, "ROLE_USER,ROLE_ADMIN")
-     */
-    fun getRolesFromToken(token: String): Mono<List<String>> {
-        return Mono.fromCallable {
-            val roles = getClaims(token).get("roles", String::class.java)
-            roles?.split(",")?.map { it.trim() } ?: emptyList()
-        }.onErrorResume { Mono.empty() }
+        return jwt.payload
     }
 
     /**

@@ -1,0 +1,11 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "/api/user/john"
+  },
+  "response": {
+    "status": 200,
+    "body": "{\"id\": 42, \"username\": \"john\", \"role\": \"USER\"}",
+    "headers": { "Content-Type": "application/json" }
+  }
+}

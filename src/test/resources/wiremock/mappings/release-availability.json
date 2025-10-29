@@ -1,0 +1,9 @@
+{
+  "request": {
+    "method": "POST",
+    "urlPath": "/api/rooms/101/release-availability"
+  },
+  "response": {
+    "status": 200
+  }
+}

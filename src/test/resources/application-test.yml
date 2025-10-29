@@ -1,0 +1,16 @@
+app:
+  gateway:
+    url: http://localhost:${WIREMOCK_PORT}
+
+spring:
+  r2dbc:
+    url: r2dbc:h2:mem:///testdb;DB_CLOSE_DELAY=-1
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+
+logging:
+  level:
+    com.github.tomakehurst.wiremock: DEBUG
+    reactor.netty: DEBUG
+    ru.dan.booking: DEBUG

@@ -1,0 +1,11 @@
+{
+  "request": {
+    "method": "POST",
+    "urlPath": "/api/rooms/101/confirm-availability"
+  },
+  "response": {
+    "status": 200,
+    "body": "101",
+    "headers": { "Content-Type": "text/plain" }
+  }
+}

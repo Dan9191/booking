@@ -1,0 +1,11 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "/api/rooms/101"
+  },
+  "response": {
+    "status": 200,
+    "body": "{\"id\": 101, \"hotelId\": 5, \"number\": \"A-305\"}",
+    "headers": { "Content-Type": "application/json" }
+  }
+}

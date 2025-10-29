@@ -1,0 +1,11 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "/api/hotels/5"
+  },
+  "response": {
+    "status": 200,
+    "body": "{\"id\": 5, \"name\": \"Grand Plaza\", \"address\": \"Moscow\"}",
+    "headers": { "Content-Type": "application/json" }
+  }
+}

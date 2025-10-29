@@ -1,0 +1,15 @@
+{
+  "request": {
+    "method": "GET",
+    "urlPath": "/api/rooms/recommend",
+    "queryParameters": {
+      "startDate": { "matches": "2025-11-01" },
+      "endDate": { "matches": "2025-11-05" }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "room-recommend-response.json",
+    "headers": { "Content-Type": "application/json" }
+  }
+}
